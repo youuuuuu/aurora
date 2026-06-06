@@ -46,8 +46,11 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
                     }
                     return true;
                 } catch (RedisConnectionFailureException e) {
-                    log.warn("redis错误: " + e.getMessage());
-                    return false;
+                    log.warn("Redis连接异常，跳过限流检查，请求路径: {}, 异常信息: {}", httpServletRequest.getRequestURI(), e.getMessage());
+                    return true;
+                } catch (Exception e) {
+                    log.warn("Redis操作异常，跳过限流检查，请求路径: {}, 异常信息: {}", httpServletRequest.getRequestURI(), e.getMessage());
+                    return true;
                 }
             }
         }
