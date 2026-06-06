@@ -1,0 +1,17 @@
+diff --git a/aurora-springboot/src/main/java/com/aurora/interceptor/AccessLimitInterceptor.java b/aurora-springboot/src/main/java/com/aurora/interceptor/AccessLimitInterceptor.java
+index 7446d86..fe561ce 100644
+--- a/aurora-springboot/src/main/java/com/aurora/interceptor/AccessLimitInterceptor.java
++++ b/aurora-springboot/src/main/java/com/aurora/interceptor/AccessLimitInterceptor.java
+@@ -45,9 +45,9 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
+                         return false;
+                     }
+                     return true;
+-                } catch (RedisConnectionFailureException e) {
+-                    log.warn("redis错误: " + e.getMessage());
+-                    return false;
++                } catch (Exception e) {
++                    log.warn("Redis异常，跳过限流检查，放行请求。路径: {}, 异常: {}", httpServletRequest.getRequestURI(), e.getMessage());
++                    return true;
+                 }
+             }
+         }
