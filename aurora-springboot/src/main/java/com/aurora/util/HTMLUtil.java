@@ -21,7 +21,9 @@ public class HTMLUtil {
         source = source.replaceAll("(?!<(img).*?>)<.*?>", "")
                 .replaceAll("(onload(.*?)=)", "")
                 .replaceAll("(onerror(.*?)=)", "");
-        return deleteHMTLTag(source);
+        source = deleteHMTLTag(source);
+        source = sensitiveWordBs.replace(source);
+        return source;
     }
 
     public static String deleteHMTLTag(String source) {
