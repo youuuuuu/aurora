@@ -8,7 +8,7 @@ import com.aurora.service.RedisService;
 import com.aurora.util.IpUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -45,9 +45,9 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
                         return false;
                     }
                     return true;
-                } catch (RedisConnectionFailureException e) {
-                    log.warn("redis错误: " + e.getMessage());
-                    return false;
+                } catch (DataAccessException e) {
+                    log.warn("Redis限流降级，请求放行，requestUri: {}, error: {}", httpServletRequest.getRequestURI(), e.getMessage(), e);
+                    return true;
                 }
             }
         }
