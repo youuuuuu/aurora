@@ -4,24 +4,17 @@ import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 
 public class HTMLUtil {
 
-    // temporary unused
-    private static final SensitiveWordBs sensitiveWordBs = SensitiveWordBs.newInstance()
-            .ignoreCase(true)
-            .ignoreWidth(true)
-            .ignoreNumStyle(true)
-            .ignoreChineseStyle(true)
-            .ignoreEnglishStyle(true)
-            .ignoreRepeat(true)
-            .enableNumCheck(false)
-            .enableEmailCheck(false)
-            .enableUrlCheck(false)
-            .init();
+    private static final SensitiveWordBs sensitiveWordBs = SensitiveWordBs.newInstance().init();
 
     public static String filter(String source) {
         source = source.replaceAll("(?!<(img).*?>)<.*?>", "")
                 .replaceAll("(onload(.*?)=)", "")
                 .replaceAll("(onerror(.*?)=)", "");
-        return deleteHMTLTag(source);
+        source = deleteHMTLTag(source);
+        if (sensitiveWordBs.contains(source)) {
+            return sensitiveWordBs.replace(source);
+        }
+        return source;
     }
 
     public static String deleteHMTLTag(String source) {
